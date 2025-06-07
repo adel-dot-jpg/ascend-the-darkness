@@ -228,7 +228,7 @@ class Enemy(pygame.sprite.Sprite):
             if timer>= self.frameTimer:
                 self.image = game.enemySpritesheet[1*self.frame1]
                 self.frameTimer = timer+game.enemyFrameTimer
-                self.frame1=not self.frame1
+                self.frame1 = not self.frame1
                 if not self.dir: #going left
                     self.image = pygame.transform.flip(self.image, True, False)
                     self.image.set_colorkey(BLACK)
@@ -488,9 +488,9 @@ class Player(pygame.sprite.Sprite):
         self.walking = False # for the footstep sound effect
 
         # set up the sound effects for the player
-        self.ei = pygame.mixer.Sound('Assets/jump.mp3')
+        self.ei = pygame.mixer.Sound('Assets/audio/jump.mp3')
         self.ei.set_volume(0.1)
-        self.ih = pygame.mixer.Sound('Assets/hit.mp3')
+        self.ih = pygame.mixer.Sound('Assets/audio/hit.mp3')
         
         # set up movement variables
         self.moveLeft = False
@@ -570,7 +570,7 @@ class Player(pygame.sprite.Sprite):
                     self.frame=8
                 self.changeFrame= False
                 self.lastAnim = 1
-                if self.faceLeft:
+                if self.faceLeft or self.moveLeft:
                     self.image = pygame.transform.flip(self.image, True, False)
                     self.image.set_colorkey(BLACK)
 
@@ -681,7 +681,7 @@ class Game():
         
         # set up the groups. allSprites is not needed since there are differet sprites for different levels. the level groups do basically the same thing
 
-        pimage = load_image("Assets/cha.png", True)
+        pimage = load_image("Assets/hitbox.png", True)
         self.player = Player(pimage)
         self.boxes = pygame.sprite.Group()
         self.platforms = pygame.sprite.Group()
@@ -703,7 +703,6 @@ class Game():
         self.platImage = load_image('Assets/okood.jpg', False)
         self.platLong = load_image('Assets/loong.jpg', False)
         self.boxImage = load_image('Assets/cratos.jpg', False)
-        self.scrib = load_image('Assets/Screb.png', True)
         self.floorImg = load_image('Assets/floot.jpg', False)
         self.wallImg = load_image('Assets/woll.jpg', False)
         self.roof = load_image('Assets/woof.jpg', False)
@@ -717,7 +716,7 @@ class Game():
         self.lifebar = load_image('Assets/lifebarbigger.png', True)
         self.lifebars = [(0, 0, 245, 67), (0, 67, 245, 67), (0, 134, 245, 67), (0, 201, 245, 67), (0, 268, 245, 67), (0, 335, 245, 67)]
         self.hud = load_image('Assets/huddd.png', True)
-        self.torch  = load_image('Assets/torch4.png', True)
+        self.torch  = load_image('Assets/new/torchradial.png', True)
         self.exitImg = load_image('Assets/aexit2.png', True)
         self.artImg = load_image('Assets/Adolite.png', True)
         self.artIcon = load_image('Assets/adoliteIcon.png', True)
@@ -730,7 +729,8 @@ class Game():
         self.cursorImg1 = load_image('Assets/thefinal.png', True)
         self.cursorImg2 = load_image('Assets/cursorrr.png', True)
         self.radial = load_image('Assets/radial.png', True)
-        self.veins = load_image('Assets/dein.png', True)
+        self.smallveins = load_image('Assets/dein.png', True)
+        self.largeveins = load_image('Assets/cein.png', True)
         self.blood = load_image('Assets/d.png', True)
         self.cursorStyle = 0 # the index for changing the cursor
         self.cursor = Cursor([self.cursorImg1, self.cursorImg2])
@@ -770,7 +770,7 @@ class Game():
         # set up the levels
         self.currentLevel = 0 # actually the level 1 above this
         self.levels = [
-        [Platform(self.platLong, -1026, -473), Floor(self.roof, -800, -1350), Floor(self.wallImg, -500, 650), Floor(self.wallImg, -500, 150), Floor(self.wallImg, -500, -350), Floor(self.wallImg, -500, -850), Floor(self.dirt, 4125, 650), Floor(self.dirt, 4125, 150), Floor(self.dirt, 4125, -500), Floor(self.dirt, 4125, -1150), Floor(self.floorImg, -424, 650), Floor(self.floorImg, 1076, 650), Floor(self.floorImg, 2576, 650), Floor(self.dirt, -787, 650), Floor(self.dirt, -787, 150), Floor(self.dirt, -787, -500), Floor(self.dirt, -787, -1150), Floor(self.wallImg, 4050, 650), Floor(self.wallImg, 4050, 150), Floor(self.wallImg, 4050, -350), Floor(self.wallImg, 4050, -850), Floor(self.roof, 2575, -1350), Floor(self.roof, 1024, -1350), Floor(self.roof, -20, -1350), Decoration(self.torch, 350, 150), Decoration(self.torch, -500, -840), Decoration(self.torch, -445, -1320), Decoration(self.torch, -148, -1320), Decoration(self.torch, 168, -1320), Decoration(self.torch, 1300, 100), Decoration(self.torch, 2100, -140), Decoration(self.torch, 2100, -420), Decoration(self.torch, 2100, -780), Decoration(self.ladder, 3810, -1180), Platform(self.platImage, 900, 420), Platform(self.platImage, 1200, 260), Platform(self.platImage, 1500, 100), Platform(self.platLong, 1850, 275), Platform(self.platLong, 1850, -65), Platform(self.platLong, 1850, -355), Box(self.boxImage, 800, 550), Enemy(self.scrib, 1950, 274, 600), Box(self.boxImage, 2730, 100), Platform(self.platImage, 3000, -210), Platform(self.platLong, 3050, -520), Enemy(self.scrib, 3300, -521, 400), Box(self.boxImage, 3820, -530), Platform(self.platImage, 2700, -750), Platform(self.platLong, 3050, -1000), Platform(self.platLong, 1650, -1060), Box(self.boxImage, 3500, -1030), Artifact(self.artImg, 1750, -1135), Platform(self.block, 3675, -1350), Exit(self.exitImg, 3780, -1196), Floor(self.dirty, 2575, -1425), Floor(self.dirty, 625, -1425), Floor(self.dirty, -1000, -1425), Platform(self.platImage, -425, 360), Platform(self.platImage, -150, 160), Platform(self.platImage, -425, -30), Platform(self.platImage, 0, -180), Floor(self.wallImg, 1576, -833), Floor(self.wallImg, 1576, -316), Platform(self.platLong, 576, -373), Platform(self.platLong, 276, -373), Enemy(self.scrib, 326, -373, 500), Enemy(self.scrib, 626, -373, 880), Enemy(self.scrib, 450, -373, 400), Platform(self.platLong, -425, -800), Platform(self.platImage, 700, -600), Enemy(self.scrib, -325, -800, 650), Enemy(self.scrib, 27, -800, 400), Box(self.boxImage, 732, -650), Decoration(self.blood, 3650, 300)] # floor 1
+        [Platform(self.platLong, -1026, -473), Floor(self.roof, -800, -1350), Floor(self.wallImg, -500, 650), Floor(self.wallImg, -500, 150), Floor(self.wallImg, -500, -350), Floor(self.wallImg, -500, -850), Floor(self.dirt, 4125, 650), Floor(self.dirt, 4125, 150), Floor(self.dirt, 4125, -500), Floor(self.dirt, 4125, -1150), Floor(self.floorImg, -424, 650), Floor(self.floorImg, 1076, 650), Floor(self.floorImg, 2576, 650), Floor(self.dirt, -787, 650), Floor(self.dirt, -787, 150), Floor(self.dirt, -787, -500), Floor(self.dirt, -787, -1150), Floor(self.wallImg, 4050, 650), Floor(self.wallImg, 4050, 150), Floor(self.wallImg, 4050, -350), Floor(self.wallImg, 4050, -850), Floor(self.roof, 2575, -1350), Floor(self.roof, 1024, -1350), Floor(self.roof, -20, -1350), Decoration(self.torch, 350, 150), Decoration(self.torch, -500, -840), Decoration(self.torch, -445, -1320), Decoration(self.torch, -148, -1320), Decoration(self.torch, 168, -1320), Decoration(self.torch, 1300, 100), Decoration(self.torch, 2100, -140), Decoration(self.torch, 2100, -420), Decoration(self.torch, 2100, -780), Decoration(self.ladder, 3810, -1180), Platform(self.platImage, 900, 420), Platform(self.platImage, 1200, 260), Platform(self.platImage, 1500, 100), Platform(self.platLong, 1850, 275), Platform(self.platLong, 1850, -65), Platform(self.platLong, 1850, -355), Box(self.boxImage, 800, 550), Enemy(self.enemySpritesheet[0], 1950, 274, 600), Box(self.boxImage, 2730, 100), Platform(self.platImage, 3000, -210), Platform(self.platLong, 3050, -520), Enemy(self.enemySpritesheet[0], 3300, -521, 400), Box(self.boxImage, 3820, -530), Platform(self.platImage, 2700, -750), Platform(self.platLong, 3050, -1000), Platform(self.platLong, 1650, -1060), Box(self.boxImage, 3500, -1030), Artifact(self.artImg, 1750, -1135), Platform(self.block, 3675, -1350), Exit(self.exitImg, 3780, -1196), Floor(self.dirty, 2575, -1425), Floor(self.dirty, 625, -1425), Floor(self.dirty, -1000, -1425), Platform(self.platImage, -425, 360), Platform(self.platImage, -150, 160), Platform(self.platImage, -425, -30), Platform(self.platImage, 0, -180), Floor(self.wallImg, 1576, -833), Floor(self.wallImg, 1576, -316), Platform(self.platLong, 576, -373), Platform(self.platLong, 276, -373), Enemy(self.enemySpritesheet[0], 326, -373, 500), Enemy(self.enemySpritesheet[0], 626, -373, 880), Enemy(self.enemySpritesheet[0], 450, -373, 400), Platform(self.platLong, -425, -800), Platform(self.platImage, 700, -600), Enemy(self.enemySpritesheet[0], -325, -800, 650), Enemy(self.enemySpritesheet[0], 27, -800, 400), Box(self.boxImage, 732, -650), Decoration(self.blood, 3650, 300)] # floor 1
         ]
         self.level1 = pygame.sprite.Group() # planned to have this many, but ran out of time.
         self.level2 = pygame.sprite.Group()
@@ -780,16 +780,16 @@ class Game():
         self.createLevel(self.levels[self.currentLevel])
 
         # set up music and sounds
-        pygame.mixer.music.load('Assets/soaked in darkness.wav')
-        self.gameOverSound = pygame.mixer.Sound('Assets/sus.wav')
-        self.winSound = pygame.mixer.Sound('Assets/open.wav')
-        self.hitSound = pygame.mixer.Sound('Assets/slatt.wav')
-        self.pickupSound = pygame.mixer.Sound('Assets/itemGet.wav')
-        self.clickSound = pygame.mixer.Sound('Assets/menuclick.mp3')
-        self.stepSound = pygame.mixer.Sound('Assets/step.mp3')
+        pygame.mixer.music.load('Assets/audio/soaked in darkness.wav')
+        #self.gameOverSound = pygame.mixer.Sound('Assets/sus.wav')
+        self.winSound = pygame.mixer.Sound('Assets/audio/open.wav')
+        self.hitSound = pygame.mixer.Sound('Assets/audio/slatt.wav')
+        self.pickupSound = pygame.mixer.Sound('Assets/audio/itemGet.wav')
+        self.clickSound = pygame.mixer.Sound('Assets/audio/menuclick.mp3')
+        #self.stepSound = pygame.mixer.Sound('Assets/step.mp3')
         self.steppy = [] # all step sound effects
         for x in range(1, 4):
-            item = pygame.mixer.Sound("assets/steppy"+str(x)+".mp3")
+            item = pygame.mixer.Sound("assets/audio/steppy"+str(x)+".mp3")
             item.set_volume(0.15)
             self.steppy.append(item)
             
@@ -835,7 +835,7 @@ class Game():
     def menu(self, surface, game):
         surface.blit(self.menuimg, (0, 0))
         pygame.display.update()
-        pygame.mixer.music.load('Assets/null.mp3')
+        pygame.mixer.music.load('Assets/audio/null.mp3')
         pygame.mixer.music.play(1, 0.0)
         going = True
         while going:
@@ -846,7 +846,7 @@ class Game():
                     if event.key == K_SPACE:
                         self.clickSound.play()
                         going = False
-        pygame.mixer.music.load('Assets/soaked in darkness.wav')
+        pygame.mixer.music.load('Assets/audio/soaked in darkness.wav')
         return
 
     def get_image(self, sheet, width, height, frame, row):
@@ -858,7 +858,7 @@ class Game():
 
     def get_animation(self, spritesheet, frames, framewidth, frameheight, rows):
         # extract frames from a spritesheet and return a list of them
-        temp_list= []
+        temp_list = []
         for x in range(rows):
             for frame in range(frames):
                 temp_list.append(self.get_image(spritesheet, framewidth, frameheight, frame, x))
@@ -1346,8 +1346,10 @@ class Game():
             self.levelGroups[self.currentLevel].draw(windowSurface)
             windowSurface.blit(self.player.image, (self.player.rect.left-self.player.rectOffsetY, self.player.rect.top-14))
             #print(self.player.rect)
-            if self.player.lives <3:
-                windowSurface.blit(self.veins, (0, 0))
+            if self.player.lives <2:
+                windowSurface.blit(self.largeveins, (0, 0))
+            elif self.player.lives <5:
+                windowSurface.blit(self.smallveins, (0, 0))
             windowSurface.blit(self.radial, (-150, -350))
             windowSurface.blit(self.lifebar, (120, 30), self.lifebars[5-self.player.lives])
             windowSurface.blit(self.hud, (15, 33))
@@ -1377,7 +1379,7 @@ class Game():
             windowSurface.blit(surface, (0,0))
             s = pygame.Surface((WINDOWWIDTH,WINDOWHEIGHT))
             s.set_alpha(alpha)
-            s.fill((0,0,0))
+            s.fill(BLACK)
             windowSurface.blit(s, (0,0))
             if time.time() - time1 > 2:
                 if time.time() - current > self.frameTimer4:
@@ -1388,8 +1390,7 @@ class Game():
                     else:
                         alpha = 0
                     current = time.time()
-            else:
-                x = 11
+
             self.player.image = self.animations[3][x]
             windowSurface.blit(self.player.image, (self.player.rect.left-40, self.player.rect.top-14))
             windowSurface.blit(self.radial, (-150, -350))
@@ -1398,8 +1399,8 @@ class Game():
 
     def lose(self, windowSurface):
         """when the player loses"""
-        if self.musicPlaying:
-            self.gameOverSound.play()
+        #if self.musicPlaying:
+        #    self.gameOverSound.play()
         timing = time.time()
         self.player.frame=0
         restart = Rect(390, 393, 180, 36)
